@@ -1,0 +1,49 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API de Pokémon con Node.JS</title>
+
+</head>
+<body>
+<h1>Buscar Pokémon</h1>
+<input type="text" id="pokemon" placeholder="Escribe el nombre de un Pokémon">
+<button onclick="searchPokemon()">Buscar</button>
+
+<div class="pokemon-info" id="pokemon-info"></div>
+<script>
+    function searchPokemon() {
+        const name = document.getElementById(`pokemon`).value.toLowerCase();
+        const pokemonInfoDiv = document.getElementById('pokemon-info');
+
+        if (name) {
+            fetch( `/pokemon/${name}`)
+                .then(response => {
+                    if (!response.ok) { // Manejo correcto de error
+                        pokemonInfoDiv.innerHTML = 'Pokemon no encontrado';
+                        throw new Error('Pokemon no encontrado');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const html = `
+                        <h2>${data.name}</h2>
+                        <img src="${data.sprites.front_default}" alt="${data.name}">
+                        <p><strong>Altura:</strong> ${data.height / 10}m</p>
+                        <p><strong>Peso:</strong> ${data.weight / 10}kg</p>
+                        <p><strong>Habilidades:</strong> ${data.abilities.map(a => a.ability.name).join(', ')}</p>
+                        `;
+                    pokemonInfoDiv.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    }
+</script>
+</body>
+</html>
