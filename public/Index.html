@@ -1,4 +1,3 @@
-<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
     
@@ -23,7 +22,7 @@
         if (name) {
             fetch( `/pokemon/${name}`)
                 .then(response => {
-                    if (!response.ok) { // Manejo correcto de error
+                    if (!response.ok) {
                         pokemonInfoDiv.innerHTML = 'Pokemon no encontrado';
                         throw new Error('Pokemon no encontrado');
                     }
